@@ -1,0 +1,5 @@
+httpx
+python-dotenv
+psycopg[binary]
+pandas
+streamlit
