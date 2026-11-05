@@ -2,6 +2,8 @@
 
 Ce projet utilise l'API The Movie Database pour consulter des films, simuler des requêtes et enregistrer des données dans PostgreSQL sur Supabase.
 
+**Application en ligne : [mini-projet TMDB sur Streamlit](https://mini-projet1-api.streamlit.app/)**
+
 ## Organisation
 
 - `app.py` : interface Streamlit.
