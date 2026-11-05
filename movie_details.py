@@ -26,6 +26,7 @@ def attendre_avant_retry(response, tentative):
             except (ValueError, TypeError, OverflowError):
                 delai = 2 ** (tentative - 1) + random.uniform(0, 1)
     else:
+        # Les délais augmentent : environ 1, puis 2, puis 4 secondes.
         delai = 2 ** (tentative - 1) + random.uniform(0, 1)
     print(f"Nouvelle tentative dans {delai:.1f} seconde(s)...")
     time.sleep(delai)
@@ -51,6 +52,7 @@ def requete_avec_retry(url, headers, params):
                 404: "Film introuvable : vérifie son identifiant.",
             }
             if response.status_code in messages:
+                # Ces erreurs demandent une correction, donc on ne réessaie pas.
                 raise RuntimeError(messages[response.status_code])
             if response.status_code not in (429, 500, 502, 503, 504):
                 raise RuntimeError(f"Erreur HTTP inattendue : {response.status_code}.")
@@ -62,9 +64,11 @@ def requete_avec_retry(url, headers, params):
 
 def get_movie_details(movie_id):
     """Retourne les principales informations du film identifié par movie_id."""
+    # Un booléen est aussi un entier en Python : on le refuse explicitement.
     if not isinstance(movie_id, int) or isinstance(movie_id, bool) or movie_id <= 0:
         raise ValueError("L'identifiant du film doit être un entier positif.")
 
+    # Le jeton reste dans .env et n'est pas écrit dans le code source.
     token = os.getenv("TMDB_READ_ACCESS_TOKEN")
     if not token:
         raise ValueError("Le jeton TMDB_READ_ACCESS_TOKEN est absent du fichier .env.")
