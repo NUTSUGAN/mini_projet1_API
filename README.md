@@ -34,13 +34,13 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m streamlit run app.py
 ```
 
-Saisir un identifiant (550 pour Fight Club), puis cliquer sur Rechercher. La fiche est affichée et enregistrée dans `movie_details` si la base est disponible.
+Saisir un identifiant (550 pour Fight Club), puis cliquer sur Rechercher. La fiche est affichée et enregistrée dans `movie_details` si la base est disponible. Les fiches obtenues sont conservées en mémoire par Streamlit pendant une heure, avec un maximum de 1 000 entrées ; les erreurs ne sont pas mises en cache. La sauvegarde Supabase est effectuée même lors d'une réponse provenant du cache.
 
 ## Questions communes : erreurs, concurrence et cache
 
 - **Q1 — erreurs et nouvelles tentatives :** `movie_details.py` récupère le film 550. Il réessaie jusqu'à quatre fois en cas d'erreur temporaire et utilise `Retry-After` quand il est fourni.
 - **Q2 — concurrence :** `simulation_charge.py` utilise une file bornée et des workers asyncio. Le serveur est fictif : aucun appel n'est envoyé aux routes example.com.
-- **Q3 — cache :** `cache_api.py` présente un client asynchrone avec cache en mémoire d'une heure et regroupement des appels simultanés identiques. La démonstration utilise une horloge simulée. Ce client est indépendant de la recherche Streamlit, qui utilise actuellement la fonction synchrone de Q1.
+- **Q3 — cache :** `cache_api.py` présente un client asynchrone avec cache en mémoire d'une heure et regroupement des appels simultanés identiques. La démonstration utilise une horloge simulée. La recherche Streamlit utilise également un cache d'une heure, fourni par Streamlit, autour de la fonction synchrone de Q1.
 
 ```powershell
 .\.venv\Scripts\python.exe -m projet.movie_details
